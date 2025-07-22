@@ -23,18 +23,22 @@ const login = async (req, res) => {
     const { username, password } = req.body;
     // will check whether user exist or not
     const user = users.find(user => user.username === username);
-    if( !user)  res.status(400).send({ message : 'User Not registered'});
+    if( !user)  return res.status(400).send({ message : 'User Not registered'});
 
     // Now User exist till here, now will check where password match or not 
     const isMatch = await bcrypt.compare(password,user.password);
-    if( !isMatch)  res.status(400).json({ message : 'Wrong Password'});
+    if( !isMatch)  return res.status(400).json({ message : 'Wrong Password'});
 
     const token = jwt.sign({username},process.env.JWT_SECRET,{expiresIn : '1h'});
 
     res.json({token, message : 'Login successfully' });
 }
-const profile = (req,res) => res.send({ message : 'Profile not yet implemented'});
 
+
+ // when req has been sent , I will check whether token has beeb
+const profile = (req,res) => {
+    res.send('message : User profile is this');
+}
 module.exports = {
     register,
     login ,
